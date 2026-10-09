@@ -18,12 +18,12 @@ jobs:
       PLC_PASSWORD: ${{ secrets.PLC_PASSWORD }}
     steps:
       - name: Descargar repositorio
-        uses: actions/checkout@<SHA_VERIFICADO_CHECKOUT>
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 1
 
       - name: Buscar secretos
-        uses: gitleaks/gitleaks-action@<SHA_VERIFICADO_GITLEAKS>
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -37,7 +37,7 @@ jobs:
 
       # --- Bloque: Dependencias ---
       # - name: Revisar dependencias
-      #   uses: aquasecurity/trivy-action@<SHA_VERIFICADO_TRIVY>
+      #   uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
       #   with:
       #     scan-type: fs
       #     scanners: vuln
@@ -46,7 +46,7 @@ jobs:
 
       # --- Bloque: Configuración ---
       # - name: Revisar configuración
-      #   uses: aquasecurity/trivy-action@<SHA_VERIFICADO_TRIVY>
+      #   uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
       #   with:
       #     scan-type: config
       #     exit-code: '1'

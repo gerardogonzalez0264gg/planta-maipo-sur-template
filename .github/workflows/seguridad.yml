@@ -30,26 +30,26 @@ jobs:
       # ===== EJERCICIO 2: quitar el "# " de las líneas de cada bloque =====
 
       # --- Bloque: Código propio ---
-      # - name: Instalar Semgrep
-      #   run: pip install semgrep
-      # - name: Revisar código propio
-      #   run: semgrep scan --config .semgrep.yml --error .
+      - name: Instalar Semgrep
+        run: pip install semgrep
+      - name: Revisar código propio
+        run: semgrep scan --config .semgrep.yml --error .
 
       # --- Bloque: Dependencias ---
-      # - name: Revisar dependencias
-      #   uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
-      #   with:
-      #     scan-type: fs
-      #     scanners: vuln
-      #     severity: HIGH,CRITICAL
-      #     exit-code: '1'
+      - name: Revisar dependencias
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          scan-type: fs
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          exit-code: '1'
 
       # --- Bloque: Configuración ---
-      # - name: Revisar configuración
-      #   uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
-      #   with:
-      #     scan-type: config
-      #     exit-code: '1'
+      - name: Revisar configuración
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          scan-type: config
+          exit-code: '1'
 
       - name: Prueba funcional
         # Le dice a Python que busque también en la carpeta principal

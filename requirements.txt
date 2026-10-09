@@ -1,2 +1,1 @@
-# Lista de piezas externas que usa el programa.
-# Por ahora no usa ninguna.
+requests==2.19.0

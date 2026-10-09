@@ -1,4 +1,4 @@
 # Configuración de la planta (laboratorio, todo es falso)
 planta: Maipo Sur
 controlador: simulado
-password_env: PLC_PASSWORD
+password: LAB-CLORO-2026-DEMO

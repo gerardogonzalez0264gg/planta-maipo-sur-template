@@ -1,0 +1,55 @@
+name: seguridad-planta
+
+# Se puede ejecutar a mano (botón Run workflow) y cuando se guarda algo en main
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+# Permisos mínimos: solo puede leer
+permissions:
+  contents: read
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    env:
+      # Pasa la contraseña secreta al programa sin mostrarla
+      PLC_PASSWORD: ${{ secrets.PLC_PASSWORD }}
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@<SHA_VERIFICADO_CHECKOUT>
+        with:
+          fetch-depth: 1
+
+      - name: Buscar secretos
+        uses: gitleaks/gitleaks-action@<SHA_VERIFICADO_GITLEAKS>
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ===== EJERCICIO 2: quitar el "# " de las líneas de cada bloque =====
+
+      # --- Bloque: Código propio ---
+      # - name: Instalar Semgrep
+      #   run: pip install semgrep
+      # - name: Revisar código propio
+      #   run: semgrep scan --config .semgrep.yml --error .
+
+      # --- Bloque: Dependencias ---
+      # - name: Revisar dependencias
+      #   uses: aquasecurity/trivy-action@<SHA_VERIFICADO_TRIVY>
+      #   with:
+      #     scan-type: fs
+      #     scanners: vuln
+      #     severity: HIGH,CRITICAL
+      #     exit-code: '1'
+
+      # --- Bloque: Configuración ---
+      # - name: Revisar configuración
+      #   uses: aquasecurity/trivy-action@<SHA_VERIFICADO_TRIVY>
+      #   with:
+      #     scan-type: config
+      #     exit-code: '1'
+
+      - name: Prueba funcional
+        run: python scripts/prueba_funcional.py

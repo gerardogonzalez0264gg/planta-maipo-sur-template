@@ -52,4 +52,7 @@ jobs:
       #     exit-code: '1'
 
       - name: Prueba funcional
+        # Le dice a Python que busque también en la carpeta principal
+        env:
+          PYTHONPATH: .
         run: python scripts/prueba_funcional.py

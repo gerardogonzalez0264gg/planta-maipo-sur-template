@@ -30,7 +30,7 @@
 - Hallazgo: Gitleaks detectó una credencial escrita directamente en config.yaml (línea 4). El primer run falló por eso.
 - Gravedad: Alta (da control sobre el dosificador de cloro)
 - Decisión y justificación: Corregir ahora. Se retiró el valor del archivo, config.yaml usa password_env: PLC_PASSWORD y el valor vive como secreto del repositorio. Se simula la rotación: la clave estuvo expuesta, por lo que se considera comprometida. En una planta real se cambiaría en el PLC y se revisarían los accesos recientes.
-- Responsable y fecha: [nombre], 15-10-2026
+- Responsable y fecha: Ignacio Ibañez, 15-10-2026
 
 ## Parche de IA
 Propuesta #7 - arregla la lectura del controlador (PR #1, archivo lector_cloro_ia.py). No se fusionó.

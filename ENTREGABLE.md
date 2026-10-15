@@ -2,13 +2,13 @@
 
 ## Sistema y equipo
 - Sector: Agua potable (planta Maipo Sur, sistema simulado)
-- Nombre: [NOMBRE DEL EQUIPO]
+- Nombre: [Agua Potable]
 - Roles:
-  - Operador de planta: [nombre]
-  - Desarrollador: [nombre]
-  - Guardián del pipeline: [nombre]
-  - Auditor de IA: [nombre]
-  - Relator: [nombre]
+  - Operador de planta: [Gerardo González]
+  - Desarrollador: [Gerardo González]
+  - Guardián del pipeline: [Ignacio Ibañez]
+  - Auditor de IA: [Ignacio Ibañez]
+  - Relator: [Gerardo González]
 
 ## Diagrama
 ![Modelado de amenazas](evidencias/amenazas_equipo_agua.png)
@@ -52,4 +52,5 @@ Propuesta #7 - arregla la lectura del controlador (PR #1, archivo lector_cloro_i
 - Workflow: seguridad-planta (Actions → Run workflow, rama equipo-agua).
 - Comandos equivalentes en un computador:
   - `semgrep scan --config .semgrep.yml --error .`
-  - `PLC_PASSWORD=valor-de-prueba PYTHONPATH=. python
+    
+  -PLC_PASSWORD=valor-de-prueba PYTHONPATH=. python scripts/prueba_funcional.py`

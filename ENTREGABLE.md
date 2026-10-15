@@ -2,13 +2,13 @@
 
 ## Sistema y equipo
 - Sector: Agua potable (planta Maipo Sur, sistema simulado)
-- Nombre: [NOMBRE DEL EQUIPO]
+- Nombre: [Agua Potable]
 - Roles:
-  - Operador de planta: [nombre]
-  - Desarrollador: [nombre]
-  - Guardián del pipeline: [nombre]
-  - Auditor de IA: [nombre]
-  - Relator: [nombre]
+  - Operador de planta: [Gerardo González]
+  - Desarrollador: [Gerardo González]
+  - Guardián del pipeline: [Ignacio Ibañez]
+  - Auditor de IA: [Ignacio Ibañez]
+  - Relator: [Gerardo González]
 
 ## Diagrama
 ![Modelado de amenazas](evidencias/amenazas_equipo_agua.png)

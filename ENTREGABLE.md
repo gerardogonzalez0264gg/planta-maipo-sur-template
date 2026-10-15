@@ -20,17 +20,19 @@
 
 ## Controles
 - Enlace a Actions: https://github.com/gerardogonzalez0264gg/planta-maipo-sur-template/actions/runs/38787934314
-- Controles ejecutados: Gitleaks, Semgrep, Trivy (dependencias, vulnerabilidades HIGH y CRITICAL) y Trivy (configuración). Todos en verde en la rama equipo-agua, junto con la prueba funcional.
-- Resultado de Semgrep: [lo que dijo el paso, por ejemplo "0 hallazgos"]
-- Resultado de Trivy dependencias: [lo que dijo]
-- Resultado de Trivy configuración: [lo que dijo]
-- Acciones de terceros fijadas por SHA completo (checkout, gitleaks-action y trivy-action), no por etiqueta.
+- Controles ejecutados: Gitleaks, Semgrep, Trivy (dependencias) y Trivy (configuración), más la prueba funcional. Todos terminaron en verde en la rama equipo-agua.
+- Resultado de Gitleaks: sin filtraciones (No leaks detected) tras mover la credencial a un secreto. El primer análisis había fallado por ese hallazgo.
+- Resultado de Semgrep: 0 hallazgos (2 reglas, 2 archivos Python analizados: lector_cloro.py y scripts/prueba_funcional.py).
+- Resultado de Trivy dependencias: no analizó ningún archivo ("Supported files for scanner(s) not found", 0 archivos con dependencias) porque requirements.txt solo tiene comentarios. El paso termina en verde, pero sin cobertura real.
+- Resultado de Trivy configuración: analizó infra/plc.tf (terraform, 1 archivo): 0 configuraciones inseguras.
+- Versión de Trivy usada: 0.70.0, distinta de la v0.69.4 comprometida que advierte la presentación.
+- Las acciones de terceros (checkout, gitleaks-action y trivy-action) están fijadas por SHA completo, no por etiqueta.
 
 ## Hallazgo y decisión
-- Hallazgo: Gitleaks detectó una credencial escrita directamente en config.yaml (línea 4). El primer run falló por eso.
+- Hallazgo: Gitleaks detectó una credencial escrita directamente en config.yaml (línea 4).
 - Gravedad: Alta (da control sobre el dosificador de cloro)
 - Decisión y justificación: Corregir ahora. Se retiró el valor del archivo, config.yaml usa password_env: PLC_PASSWORD y el valor vive como secreto del repositorio. Se simula la rotación: la clave estuvo expuesta, por lo que se considera comprometida. En una planta real se cambiaría en el PLC y se revisarían los accesos recientes.
-- Responsable y fecha: Ignacio Ibañez, 15-10-2026
+- Responsable y fecha: Gerardo González, 15-10-2026
 
 ## Parche de IA
 Propuesta #7 - arregla la lectura del controlador (PR #1, archivo lector_cloro_ia.py). No se fusionó.
@@ -39,11 +41,12 @@ Propuesta #7 - arregla la lectura del controlador (PR #1, archivo lector_cloro_i
 - Protecciones desactivadas: Sí. requests.post(..., verify=False) apaga la validación TLS (línea 15; Semgrep: python-tls-sin-validar).
 - Destino de datos: TELEMETRIA = http://telemetria.ejemplo.invalid/datos (línea 7), sin justificación y sin cifrar. Se le envía la salida del comando ejecutado.
 - Veredicto y evidencia: RECHAZADO. Combina paquete no verificado, shell con texto concatenado, TLS desactivado y envío de datos injustificado. El PR además no tiene ninguna revisión automática (Checks: 0).
-- Explicación para el operador (redactada con IA, revisada por [nombre]): Este parche permite que un texto ajeno se ejecute como comando en el equipo que habla con el controlador, así que alguien podría dar órdenes no autorizadas que alteren la dosificación de cloro. Además envía los datos a un destino sin justificar y con la verificación de seguridad desactivada, por lo que podrían filtrarse o modificarse sin que nadie lo note.
+- Explicación para el operador (redactada con IA, revisada por Ignacio Ibañez): Este parche permite que un texto ajeno se ejecute como comando en el equipo que habla con el controlador, así que alguien podría dar órdenes no autorizadas que alteren la dosificación de cloro. Además envía los datos a un destino sin justificar y con la verificación de seguridad desactivada, por lo que podrían filtrarse o modificarse sin que nadie lo note.
 
 ## Pendientes para un sistema real
 - Rotar la credencial en el PLC y revisar los accesos de los últimos días.
 - Limpiar el historial del repositorio, donde la clave original sigue guardada.
+- Declarar las dependencias reales en requirements.txt o un lockfile, para que Trivy y OSV-Scanner tengan algo que analizar; hoy ese control pasa sin revisar nada.
 - Agregar el disparador pull_request al workflow para que los cambios se revisen antes de aceptarlos.
 - Segundo factor de autenticación y segmentación de red entre HMI y PLC.
 - Generar y guardar la lista de materiales del software (SBOM).
@@ -52,5 +55,4 @@ Propuesta #7 - arregla la lectura del controlador (PR #1, archivo lector_cloro_i
 - Workflow: seguridad-planta (Actions → Run workflow, rama equipo-agua).
 - Comandos equivalentes en un computador:
   - `semgrep scan --config .semgrep.yml --error .`
-    
-  -PLC_PASSWORD=valor-de-prueba PYTHONPATH=. python scripts/prueba_funcional.py`
+  - `PLC_PASSWORD=valor-de-prueba PYTHONPATH=. python scripts/prueba_funcional.py`
